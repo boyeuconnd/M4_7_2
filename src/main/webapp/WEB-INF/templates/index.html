@@ -36,7 +36,13 @@
     </form>
     <div class="commentContainer" style="font-size: 24px">
         <div th:each="cmt: ${comments}">
-            <p th:text="'+'+${cmt.getPoint()}+' ' + ${cmt.getAuthor()}+': '+ ${cmt.getFeedback()}" ></p>
+            <p th:hidden="${cmt.getId()}"></p>
+            <span th:text="'+'+${cmt.getPoint()}+' ' + ${cmt.getAuthor()}+': '+ ${cmt.getFeedback()}" ></span><br>
+            <span th:text="${cmt.getLikes()}"></span>&nbsp;
+            <a  th:href="@{/like/__${cmt.getId()}__}">
+                <button>Like</button>
+            </a>
+
             <hr>
         </div>
     </div>

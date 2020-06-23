@@ -67,4 +67,40 @@ public class Img_comment_impl implements Img_comment {
         query.setParameter("today",timestampToday);
         return query.getResultList();
     }
+
+    @Override
+    public Img findByid(Long id) {
+        String queryStr = "SELECT c FROM Img AS c WHERE c.id = :id";
+        TypedQuery<Img> query = entityManager.createQuery(queryStr,Img.class);
+        query.setParameter("id",id);
+        return query.getSingleResult();
+    }
+
+    @Override
+    public void like(Img img) {
+//        int likeAmount = this.findByid(id).getLikes();
+//        String queryStr = "UPDATE Img AS i SET i.likes = :likeamount WHERE i.id = :id";
+//        TypedQuery<Img> query = entityManager.createQuery(queryStr,Img.class);
+//        query.setParameter("likeamount",likeAmount +1);
+//        query.setParameter("id",id);
+        Session session =null;
+        Transaction transaction = null;
+        try{
+            session=sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            img.setLikes(img.getLikes()+1);
+            session.saveOrUpdate(img);
+            transaction.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+            if (transaction != null) {
+                transaction.rollback();
+            }
+
+        }finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
 }

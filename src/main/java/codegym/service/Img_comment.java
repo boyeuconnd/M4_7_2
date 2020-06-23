@@ -8,4 +8,8 @@ public interface Img_comment {
     void comment(Img img);
 
     List<Img> showAllComment();
+
+    Img findByid(Long id);
+
+    void like(Img img);
 }

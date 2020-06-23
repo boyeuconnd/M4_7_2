@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -31,6 +32,13 @@ public class ImgController {
     @PostMapping("/comment")
     public String comment(@ModelAttribute Img img){
         img_comment.comment(img);
+        return ("redirect:/");
+    }
+
+    @GetMapping("/like/{id}")
+    public String like(@PathVariable Long id){
+        Img likeImg = img_comment.findByid(id);
+        img_comment.like(likeImg);
         return ("redirect:/");
     }
 }
