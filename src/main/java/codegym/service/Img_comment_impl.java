@@ -1,11 +1,15 @@
 package codegym.service;
 
 import codegym.model.Img;
+import codegym.repository.Img_comment_Repository;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -18,89 +22,43 @@ public class Img_comment_impl implements Img_comment {
     private static SessionFactory sessionFactory;
     private static EntityManager entityManager;
 
-    static {
-        try {
-            sessionFactory = new Configuration()
-                    .configure("hibernate.conf.xml")
-                    .buildSessionFactory();
-            entityManager = sessionFactory.createEntityManager();
-        } catch (HibernateException e) {
-            e.printStackTrace();
-        }
-    }
+    @Autowired
+    private Img_comment_Repository img_comment_repository;
+
+
     @Override
     public void comment(Img img) {
-        Session session =null;
-        Transaction transaction = null;
-        try{
-            session=sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            Img commentImg = new Img();
-            commentImg.setAuthor(img.getAuthor());
-            commentImg.setFeedback(img.getFeedback());
-            commentImg.setPoint(img.getPoint());
-            commentImg.setDate(new Timestamp(System.currentTimeMillis()));
-            session.save(commentImg);
-            transaction.commit();
-        }catch (Exception e){
-            e.printStackTrace();
-            if (transaction != null) {
-                transaction.rollback();
-            }
-
-        }finally {
-            if (session != null) {
-                session.close();
-            }
-        }
+        img_comment_repository.save(img);
 
     }
 
     @Override
-    public List<Img> showAllComment() {
-        Timestamp timestampToday = new Timestamp(System.currentTimeMillis());
-        timestampToday.setHours(0);
-        timestampToday.setMinutes(0);
-        timestampToday.setSeconds(0);
-        String queryStr = "SELECT c FROM Img AS c WHERE c.date >= :today ";
-        TypedQuery<Img> query = entityManager.createQuery(queryStr,Img.class);
-        query.setParameter("today",timestampToday);
-        return query.getResultList();
+    public Page<Img> showAllComment(Pageable pageable) {
+        return img_comment_repository.findAll(pageable);
     }
+
+//    @Override
+//    public List<Img> showAllComment() {
+//        Timestamp timestampToday = new Timestamp(System.currentTimeMillis());
+//        timestampToday.setHours(0);
+//        timestampToday.setMinutes(0);
+//        timestampToday.setSeconds(0);
+//        String queryStr = "SELECT c FROM Img AS c WHERE c.date >= :today ";
+//        TypedQuery<Img> query = entityManager.createQuery(queryStr,Img.class);
+//        query.setParameter("today",timestampToday);
+//        return query.getResultList();
+//    }
 
     @Override
     public Img findByid(Long id) {
-        String queryStr = "SELECT c FROM Img AS c WHERE c.id = :id";
-        TypedQuery<Img> query = entityManager.createQuery(queryStr,Img.class);
-        query.setParameter("id",id);
-        return query.getSingleResult();
+        return img_comment_repository.findOne(id);
+
     }
 
     @Override
     public void like(Img img) {
-//        int likeAmount = this.findByid(id).getLikes();
-//        String queryStr = "UPDATE Img AS i SET i.likes = :likeamount WHERE i.id = :id";
-//        TypedQuery<Img> query = entityManager.createQuery(queryStr,Img.class);
-//        query.setParameter("likeamount",likeAmount +1);
-//        query.setParameter("id",id);
-        Session session =null;
-        Transaction transaction = null;
-        try{
-            session=sessionFactory.openSession();
-            transaction = session.beginTransaction();
-            img.setLikes(img.getLikes()+1);
-            session.saveOrUpdate(img);
-            transaction.commit();
-        }catch (Exception e){
-            e.printStackTrace();
-            if (transaction != null) {
-                transaction.rollback();
-            }
+        img.setLikes(img.getLikes()+1);
+        img_comment_repository.save(img);
 
-        }finally {
-            if (session != null) {
-                session.close();
-            }
-        }
     }
 }

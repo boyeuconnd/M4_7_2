@@ -4,6 +4,9 @@ import codegym.model.Img;
 import codegym.service.Img_comment;
 import codegym.service.Img_comment_impl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +25,8 @@ public class ImgController {
     private Img_comment img_comment;
 
     @GetMapping("/")
-    public String getLandingPage(Model model){
-        List<Img> commentList = img_comment.showAllComment();
+    public String getLandingPage(Model model,@PageableDefault(size = 3) Pageable pageable){
+        Page<Img> commentList = img_comment.showAllComment(pageable);
         model.addAttribute("comments",commentList);
         return "index";
     }
