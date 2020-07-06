@@ -5,8 +5,8 @@
     <title>Img of the Days</title>
 </head>
 <body>
-    <div class="img-container">
-        <img id="img-of-the-day">
+    <div class="imgComment-container">
+        <imgComment id="imgComment-of-the-day">
         <script>
             let query = 'https://api.nasa.gov/planetary/apod?api_key=a8jCFVbyRl5Q3tBmuJNi1aNbBiEmCFLsrqux4PSq';
             let request = new XMLHttpRequest();
@@ -14,11 +14,12 @@
             request.onload = function() {
                 if (request.status === 200) {
                     let response = JSON.parse(request.responseText);
-                    document.getElementById('img-of-the-day').setAttribute('src', response.url);
+                    document.getElementById('imgComment-of-the-day').setAttribute('src', response.url);
                 }
             };
             request.send();
         </script>
+        </imgComment>
     </div>
     <form action="#" th:action="@{/comment}" method="post">
         <select name="point" id="point">

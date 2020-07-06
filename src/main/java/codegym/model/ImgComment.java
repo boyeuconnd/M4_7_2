@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table
-public class Img implements Cloneable {
+public class ImgComment implements Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -16,10 +16,10 @@ public class Img implements Cloneable {
     private Timestamp date;
     private int likes;
 
-    public Img() {
+    public ImgComment() {
     }
 
-    public Img(String author, String feedback, int point, Timestamp date, int likes) {
+    public ImgComment(String author, String feedback, int point, Timestamp date, int likes) {
         this.author = author;
         this.feedback = feedback;
         this.point = point;

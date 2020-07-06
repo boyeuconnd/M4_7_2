@@ -1,5 +1,6 @@
 import codegym.service.Img_comment;
 import codegym.service.Img_comment_impl;
+import codegym.validWord.ValidWord;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.InitializingBean;
@@ -117,6 +118,11 @@ public class AppConfiguration extends WebMvcConfigurerAdapter implements Applica
     @Bean
     public Img_comment img_comment(){
         return  new Img_comment_impl();
+    }
+
+    @Bean
+    public ValidWord validWord(){
+        return new ValidWord();
     }
 
 }

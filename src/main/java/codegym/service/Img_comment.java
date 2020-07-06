@@ -1,17 +1,15 @@
 package codegym.service;
 
-import codegym.model.Img;
+import codegym.model.ImgComment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface Img_comment {
-    void comment(Img img);
+    void comment(ImgComment imgComment);
 
-    Page<Img> showAllComment(Pageable pageable);
+    Page<ImgComment> showAllComment(Pageable pageable);
 
-    Img findByid(Long id);
+    ImgComment findByid(Long id);
 
-    void like(Img img);
+    void like(ImgComment imgComment);
 }
